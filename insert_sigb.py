@@ -15,19 +15,24 @@ from pathlib import Path
 
 import pandas as pd
 import psycopg2
+from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).parent
 CSV_FR_PATH = BASE_DIR / "buf.csv"
 XLS_AR_PATH = BASE_DIR / "bua.xls"
 CLEAN_DIR = BASE_DIR / "final_data"
 
-DB_CONFIG = {
-    "host": os.getenv("SIGB_DB_HOST", "127.0.0.1"),
-    "port": int(os.getenv("SIGB_DB_PORT", "5432")),
-    "dbname": os.getenv("SIGB_DB_NAME", "sigb_db"),
-    "user": os.getenv("SIGB_DB_USER", "postgres"),
-    "password": os.getenv("SIGB_DB_PASSWORD", "yb1234"),
-}
+# Charge les variables du fichier .env dans l'environnement
+load_dotenv() 
+
+# Connexion directe avec psycopg2 sans avoir besoin du dictionnaire
+conn = psycopg2.connect(
+    host=os.getenv("SIGB_DB_HOST"),
+    port=os.getenv("SIGB_DB_PORT"),
+    dbname=os.getenv("SIGB_DB_NAME"),
+    user=os.getenv("SIGB_DB_USER"),
+    password=os.getenv("SIGB_DB_PASSWORD")
+)
 
 COLUMNS = [
     "Cote",
